@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+ 
+  <nav>
+    <a href="decode.html" class="active-tab">Decode</a>
+    <a href="encode.html">Encode</a>
+  </nav>
+  
+  <div id="decoder">
+    <section class="result-section">
+      <h2>JWT</h2>
+      <textarea id="jwt" placeholder="Paste here..."></textarea>
+    </section>
+    <section class="result-section">
+      <h2>Header</h2>
+      <pre id="header-result" aria-live="polite"></pre>
+    </section>
+    <section class="result-section">
+      <h2>Body</h2>
+      <pre id="body-result" aria-live="polite"></pre>
+    </section>
+    <p id="error" role="status"></p>
+  </div>
+  <script src="content.js"></script>
+</body>
+</html>

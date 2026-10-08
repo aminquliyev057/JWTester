@@ -1,0 +1,110 @@
+body {
+      width: 320px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #000;
+      color: #ff8c00;
+    }
+
+#decoder{
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+
+#jwt {
+      box-sizing: border-box;
+      width: 100%;
+      height: 200px;
+      white-space: pre-wrap;
+      overflow: auto;
+      resize: none;
+      background-color: #1c1b1b;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+    }
+
+#jwt:focus {
+      outline: none;
+    }
+
+.result-section {
+      text-align: left;
+    }
+
+.jwt-parts{
+      box-sizing: border-box;
+      width: 100%;
+      height: 100px;
+      white-space: pre-wrap;
+      overflow: auto;
+      resize: none;
+      background-color: #1c1b1b;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+}
+
+.jwt-parts:focus{
+    outline: none;
+}
+
+h2 {
+      margin: 0 0 5px;
+      font-size: 14px;
+    }
+
+pre {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 24px;
+      margin: 0;
+      overflow-wrap: anywhere;
+      text-align: left;
+      white-space: pre-wrap;
+      background-color: #1c1b1b;
+      color: #ffad42;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+    }
+
+#secret{
+      box-sizing: border-box;
+      width: 180px;
+      overflow: auto;
+      background-color: #1c1b1b;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+}
+#secret:focus{
+    outline: none;
+}
+
+button {
+      align-self: flex-start;
+      background-color: #ff8c00;
+      color: #000;
+      border: 1px solid #ff8c00;
+      border-radius: 5px;
+      padding: 6px 12px;
+      cursor: pointer;
+}
+
+button:hover {
+      background-color: #ffad42;
+}
+
+#error {
+      margin: 0;
+      color: rgb(166, 18, 18);
+    }
+ 
