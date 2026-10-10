@@ -107,4 +107,44 @@ button:hover {
       margin: 0;
       color: rgb(166, 18, 18);
     }
- 
+
+nav {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+      padding: 4px;
+      background-color: #1c1b1b;
+      border: 1px solid #39332b;
+      border-radius: 8px;
+}
+
+nav a {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: 5px;
+      color: #c9c5bf;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 120ms ease, color 120ms ease;
+}
+
+nav a:hover {
+      background-color: #302a22;
+      color: #fff;
+}
+
+nav a:focus-visible {
+      outline: 2px solid #ffad42;
+      outline-offset: 2px;
+}
+
+nav a.active-tab {
+      background-color: #ff8c00;
+      color: #17120b;
+      box-shadow: 0 1px 3px rgb(0 0 0 / 35%);
+}
+
+nav a.active-tab:hover {
+      background-color: #ffad42;
+}
