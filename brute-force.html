@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <nav>
+    <a href="./decode.html" target="_self">Decode</a>
+    <a href="./encode.html" target="_self">Encode</a>
+    <a href="./brute-force.html" class="active-tab" target="_self">Brute-force</a>
+  </nav>
+
+  <div id="brute-forcer">
+    <section class="simple-brute-force">
+        <h2>Simple Brute-force for secret key</h2>
+        <textarea id="jwt" placeholder="Paste here..."></textarea>
+
+        <div class="crack-controls">
+          <button id="crack" type="button">Crack</button>
+          <button id="cancel" type="button" disabled>Cancel</button>
+        </div>
+
+        <div id="progress" class="progress" hidden>
+          <div class="progress-bar"><div class="progress-fill"></div></div>
+          <p class="progress-text"></p>
+        </div>
+
+        <section class="result-section">
+          <h2>Secret</h2>
+          <pre id="secret-result" aria-live="polite"></pre>
+        </section>
+
+        <section class="result-section hashcat-section">
+          <h2>Hashcat command</h2>
+          <div class="hashcat-block">
+            <pre id="hashcat-cmd" aria-live="polite"></pre>
+            <button id="copy-hashcat" type="button" disabled title="Copy to clipboard" aria-label="Copy hashcat command to clipboard">
+              <svg class="copy-icon" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M5.75 1.5h6.5A1.75 1.75 0 0 1 14 3.25v6.5A1.75 1.75 0 0 1 12.25 11.5h-1.5v-1h1.5a.75.75 0 0 0 .75-.75v-6.5a.75.75 0 0 0-.75-.75h-6.5a.75.75 0 0 0-.75.75v1.5h-1v-1.5A1.75 1.75 0 0 1 5.75 1.5Z"/>
+                <path d="M3.75 4.5h6.5A1.75 1.75 0 0 1 12 6.25v6.5A1.75 1.75 0 0 1 10.25 14.5h-6.5A1.75 1.75 0 0 1 2 12.75v-6.5A1.75 1.75 0 0 1 3.75 4.5Zm-.25 1.75v6.5c0 .414.336.75.75.75h6.5a.75.75 0 0 0 .75-.75v-6.5a.75.75 0 0 0-.75-.75h-6.5a.75.75 0 0 0-.75.75Z"/>
+              </svg>
+              <span class="copy-feedback">Copied</span>
+            </button>
+          </div>
+          <p class="hashcat-hint">Paste this into a terminal once you have hashcat installed. Mode 16500 = JWT (HS256/HS384/HS512).</p>
+        </section>
+    </section>
+    <p id="error" role="status"></p>
+  </div>
+  <script src="content.js"></script>
+</body>
+</html>

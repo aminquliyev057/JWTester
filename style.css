@@ -14,6 +14,14 @@ body {
       gap: 10px;
     }
 
+#brute-forcer{
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
 
 #jwt {
       box-sizing: border-box;
@@ -36,6 +44,22 @@ body {
 .result-section {
       text-align: left;
     }
+
+.simple-brute-force {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+
+.crack-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+.crack-controls button {
+      flex: 0 0 auto;
+}
 
 .jwt-parts{
       box-sizing: border-box;
@@ -99,8 +123,150 @@ button {
       cursor: pointer;
 }
 
-button:hover {
+button:hover:not(:disabled) {
       background-color: #ffad42;
+}
+
+button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+}
+
+#cancel {
+      background-color: transparent;
+      color: #ff8c00;
+}
+
+#cancel:hover:not(:disabled) {
+      background-color: #1c1b1b;
+}
+
+.hashcat-section {
+      margin-top: 4px;
+}
+
+.hashcat-block {
+      position: relative;
+      display: flex;
+      align-items: stretch;
+      gap: 6px;
+}
+
+.hashcat-block pre {
+      flex: 1;
+      max-height: 90px;
+      overflow: auto;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 11px;
+      color: #ffad42;
+      padding-right: 38px;
+}
+
+#copy-hashcat {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(255, 140, 0, 0.08);
+      color: #c9c5bf;
+      border: 1px solid rgba(255, 140, 0, 0.25);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease, opacity 120ms ease, transform 120ms ease;
+}
+
+#copy-hashcat:hover:not(:disabled) {
+      background-color: rgba(255, 140, 0, 0.18);
+      color: #ffad42;
+      border-color: rgba(255, 140, 0, 0.55);
+      transform: translateY(-1px);
+}
+
+#copy-hashcat:active:not(:disabled) {
+      background-color: rgba(255, 140, 0, 0.28);
+      transform: translateY(0);
+}
+
+#copy-hashcat:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+}
+
+#copy-hashcat.copied {
+      background-color: rgba(76, 175, 80, 0.18);
+      color: #66bb6a;
+      border-color: rgba(76, 175, 80, 0.55);
+}
+
+.copy-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      pointer-events: none;
+}
+
+.copy-feedback {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      font-size: 10px;
+      font-weight: 600;
+      color: #66bb6a;
+      background-color: rgba(76, 175, 80, 0.12);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      border-radius: 4px;
+      padding: 2px 6px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(-2px);
+      pointer-events: none;
+      transition: opacity 120ms ease, transform 120ms ease;
+}
+
+#copy-hashcat.copied .copy-feedback {
+      opacity: 1;
+      transform: translateY(0);
+}
+
+.hashcat-hint {
+      margin: 4px 0 0;
+      font-size: 11px;
+      color: #8a847a;
+      line-height: 1.4;
+}
+
+.progress {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+}
+
+.progress-bar {
+      box-sizing: border-box;
+      width: 100%;
+      height: 8px;
+      background-color: #1c1b1b;
+      border: 1px solid #39332b;
+      border-radius: 4px;
+      overflow: hidden;
+}
+
+.progress-fill {
+      width: 0%;
+      height: 100%;
+      background-color: #ff8c00;
+      transition: width 120ms ease;
+}
+
+.progress-text {
+      margin: 0;
+      font-size: 11px;
+      color: #c9c5bf;
 }
 
 #error {
