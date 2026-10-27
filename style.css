@@ -274,6 +274,45 @@ button:disabled {
       color: rgb(166, 18, 18);
     }
 
+.credit {
+      margin-top: 8px;
+      color: #8a847a;
+      font-size: 11px;
+}
+
+.broken-heart {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+}
+
+.broken-heart-tooltip {
+      position: absolute;
+      z-index: 1;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      width: max-content;
+      max-width: 220px;
+      padding: 5px 8px;
+      border: 1px solid #39332b;
+      border-radius: 5px;
+      background-color: #1c1b1b;
+      color: #ffad42;
+      font-size: 11px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 2px);
+      transition: opacity 120ms ease, transform 120ms ease;
+      visibility: hidden;
+}
+
+.broken-heart:hover .broken-heart-tooltip,
+.broken-heart:focus-visible .broken-heart-tooltip {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      visibility: visible;
+}
+
 nav {
       display: flex;
       gap: 4px;
@@ -313,4 +352,416 @@ nav a.active-tab {
 
 nav a.active-tab:hover {
       background-color: #ffad42;
+}
+
+/* === Encoder additions === */
+
+#encoder{
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+}
+
+#algorithm{
+      box-sizing: border-box;
+      width: 100%;
+      background-color: #1c1b1b;
+      color: #fff;
+      padding: 6px 8px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+      font-size: 13px;
+      cursor: pointer;
+}
+
+#algorithm:focus{
+      outline: none;
+}
+
+.key-textarea{
+      box-sizing: border-box;
+      width: 100%;
+      height: 140px;
+      white-space: pre-wrap;
+      overflow: auto;
+      resize: none;
+      background-color: #1c1b1b;
+      color: #fff;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ff8c00;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.35;
+}
+
+.key-textarea:focus{
+      outline: none;
+}
+
+.file-label{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #c9c5bf;
+      margin-top: 4px;
+      flex-wrap: wrap;
+}
+
+.file-label input[type="file"]{
+      flex: 1;
+      font-size: 11px;
+      color: #c9c5bf;
+      cursor: pointer;
+}
+
+.file-label input[type="file"]::file-selector-button{
+      background-color: #ff8c00;
+      color: #000;
+      border: 1px solid #ff8c00;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-right: 6px;
+      cursor: pointer;
+      font-size: 11px;
+}
+
+.file-label input[type="file"]::file-selector-button:hover{
+      background-color: #ffad42;
+}
+
+.key-pair-generator{
+      border-top: 1px dashed #39332b;
+      padding-top: 10px;
+}
+
+#generated-keys{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+}
+
+.key-output{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+}
+
+.key-output-head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+}
+
+.key-output-head h3{
+      margin: 0;
+      font-size: 12px;
+      color: #ffad42;
+      font-weight: 600;
+}
+
+.copy-key-btn{
+      align-self: flex-end;
+      background-color: transparent;
+      color: #ff8c00;
+      border: 1px solid #39332b;
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 10px;
+      cursor: pointer;
+      transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.copy-key-btn:hover:not(:disabled){
+      background-color: #1c1b1b;
+      color: #ffad42;
+      border-color: #ff8c00;
+}
+
+.copy-key-btn.copied{
+      background-color: rgba(76, 175, 80, 0.18);
+      color: #66bb6a;
+      border-color: rgba(76, 175, 80, 0.55);
+}
+
+.key-pre{
+      box-sizing: border-box;
+      width: 100%;
+      max-height: 110px;
+      margin: 0;
+      overflow: auto;
+      text-align: left;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background-color: #1c1b1b;
+      color: #ffad42;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #39332b;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.3;
+}
+
+.header-tools{
+      border-top: 1px dashed #39332b;
+      padding-top: 10px;
+}
+
+.button-row{
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+}
+
+.button-row button{
+      flex: 1 1 auto;
+}
+
+.primary-btn{
+      width: 100%;
+      background-color: #ff8c00;
+      color: #000;
+      border: 1px solid #ff8c00;
+      border-radius: 5px;
+      padding: 7px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+}
+
+.primary-btn:hover:not(:disabled){
+      background-color: #ffad42;
+}
+
+.primary-btn:disabled{
+      opacity: 0.45;
+      cursor: not-allowed;
+}
+
+[hidden]{
+      display: none !important;
+}
+
+
+/* === Key list (post-redesign) === */
+
+.key-list{
+      list-style: none;
+      margin: 6px 0 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+}
+
+.key-item{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      background-color: #1c1b1b;
+      border: 1px solid #39332b;
+      border-radius: 5px;
+}
+
+.key-name{
+      font-size: 12px;
+      font-weight: 600;
+      color: #ffad42;
+}
+
+.key-actions{
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+}
+
+.key-actions .copy-key-btn{
+      align-self: auto;
+      padding: 4px 10px;
+      font-size: 11px;
+}
+
+
+/* Add JWK Header button inside the public-key row of the key list */
+.key-action-btn{
+      align-self: auto;
+      background-color: #ff8c00;
+      color: #000;
+      border: 1px solid #ff8c00;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: background-color 120ms ease;
+}
+
+.key-action-btn:hover:not(:disabled){
+      background-color: #ffad42;
+}
+
+.key-action-btn:disabled{
+      opacity: 0.45;
+      cursor: not-allowed;
+}
+
+
+/* === Polished buttons for the generated-key row === */
+
+.key-actions{
+      gap: 6px;
+}
+
+.key-actions .copy-key-btn,
+.key-actions .key-action-btn{
+      align-self: auto;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 150ms ease, color 150ms ease,
+                  border-color 150ms ease, transform 150ms ease,
+                  box-shadow 150ms ease, opacity 150ms ease;
+      line-height: 1.2;
+}
+
+/* Outline style for the copy buttons */
+.key-actions .copy-key-btn{
+      background-color: rgba(255, 140, 0, 0.08);
+      color: #ff8c00;
+      border: 1px solid rgba(255, 140, 0, 0.45);
+}
+
+.key-actions .copy-key-btn:hover:not(:disabled){
+      background-color: rgba(255, 140, 0, 0.18);
+      color: #ffad42;
+      border-color: #ff8c00;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.key-actions .copy-key-btn:active:not(:disabled){
+      transform: translateY(0);
+      box-shadow: none;
+}
+
+.key-actions .copy-key-btn.copied{
+      background-color: rgba(76, 175, 80, 0.18) !important;
+      color: #66bb6a !important;
+      border-color: rgba(76, 175, 80, 0.55) !important;
+      transform: none;
+      box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.25);
+}
+
+/* Filled style for the Add JWK Header action button */
+.key-actions .key-action-btn{
+      background-color: #ff8c00;
+      color: #17120b;
+      border: 1px solid #ff8c00;
+      box-shadow: 0 1px 3px rgba(255, 140, 0, 0.25);
+}
+
+.key-actions .key-action-btn:hover:not(:disabled){
+      background-color: #ffad42;
+      border-color: #ffad42;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(255, 140, 0, 0.4);
+}
+
+.key-actions .key-action-btn:active:not(:disabled){
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(255, 140, 0, 0.3);
+}
+
+.key-actions .key-action-btn:disabled{
+      opacity: 0.45;
+      cursor: not-allowed;
+}
+
+/* Add a subtle separator gap between the copy pair and the action button */
+.key-item .key-actions .key-action-btn{
+      margin-left: 4px;
+}
+
+
+/* === Revert public-key row buttons to flat design and enforce symmetry === */
+
+.key-item .key-actions{
+      gap: 6px;
+}
+
+/* All three buttons share identical dimensions, padding, radius, font.
+   box-sizing: border-box keeps outlined and filled variants the same size. */
+.key-item .key-actions .copy-key-btn,
+.key-item .key-actions .key-action-btn{
+      box-sizing: border-box;
+      align-self: auto;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.3;
+      border-radius: 5px;
+      border-width: 1px;
+      border-style: solid;
+      cursor: pointer;
+      transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+      transform: none;
+      box-shadow: none;
+      margin: 0;
+}
+
+/* Copy buttons: outline style */
+.key-item .key-actions .copy-key-btn{
+      background-color: transparent;
+      color: #ff8c00;
+      border-color: #ff8c00;
+}
+
+.key-item .key-actions .copy-key-btn:hover:not(:disabled){
+      background-color: #1c1b1b;
+      color: #ffad42;
+      border-color: #ffad42;
+}
+
+.key-item .key-actions .copy-key-btn:active:not(:disabled){
+      background-color: #302a22;
+}
+
+.key-item .key-actions .copy-key-btn.copied{
+      background-color: rgba(76, 175, 80, 0.18) !important;
+      color: #66bb6a !important;
+      border-color: rgba(76, 175, 80, 0.55) !important;
+}
+
+/* Add JWK Header: filled style (same dimensions, just inverted colors) */
+.key-item .key-actions .key-action-btn{
+      background-color: #ff8c00;
+      color: #17120b;
+      border-color: #ff8c00;
+}
+
+.key-item .key-actions .key-action-btn:hover:not(:disabled){
+      background-color: #ffad42;
+      color: #17120b;
+      border-color: #ffad42;
+}
+
+.key-item .key-actions .key-action-btn:active:not(:disabled){
+      background-color: #e67e00;
+}
+
+.key-item .key-actions .key-action-btn:disabled{
+      opacity: 0.45;
+      cursor: not-allowed;
 }

@@ -11,20 +11,66 @@
     <a href="./encode.html" class="active-tab" target="_self">Encode</a>
     <a href="./brute-force.html" target="_self">Brute-force</a>
   </nav>
-  
-  <div id="decoder">
+
+  <div id="encoder">
     <section class="result-section">
       <h2>Header</h2>
-      <textarea class="jwt-parts"></textarea>
+      <textarea class="jwt-parts" id="header-input" placeholder='{"alg":"HS256","typ":"JWT"}'></textarea>
     </section>
     <section class="result-section">
       <h2>Body</h2>
-      <textarea class="jwt-parts"></textarea>
+      <textarea class="jwt-parts" id="payload-input" placeholder='{"sub":"1234567890","name":"John Doe","iat":1516239022}'></textarea>
     </section>
+
     <section class="result-section">
-      <h2>Secret</h2>
-      <input id="secret" type="text">
+      <h2>Algorithm</h2>
+      <select id="algorithm">
+        <option value="HS256">HS256</option>
+        <option value="RS256">RS256</option>
+        <option value="none">none</option>
+      </select>
     </section>
+
+    <section class="result-section" id="hs256-section">
+      <h2>HS256 Secret</h2>
+      <input id="secret" type="text" placeholder="shared secret">
+    </section>
+
+    <section class="result-section" id="rs256-section" hidden>
+      <h2>RS256 Private Key (PEM)</h2>
+      <textarea id="private-key-pem" class="key-textarea" placeholder="-----BEGIN PRIVATE KEY-----&#10;...&#10;-----END PRIVATE KEY-----"></textarea>
+      <label class="file-label">Or load from file (DER / PEM):
+        <input type="file" id="private-key-file" accept=".pem,.der,.key,.txt">
+      </label>
+    </section>
+
+    <section class="result-section key-pair-generator" hidden>
+      <h2>Key Pair Generator (RSA 2048)</h2>
+      <button id="generate-keypair" type="button">Generate RSA Key Pair</button>
+      <ul id="key-list" class="key-list" hidden>
+        <li class="key-item">
+          <span class="key-name">Public Key</span>
+          <div class="key-actions">
+            <button class="copy-key-btn" data-key="public" data-format="jwk" type="button">Copy as JWK</button>
+            <button class="copy-key-btn" data-key="public" data-format="pem" type="button">Copy as PEM</button>
+            <button id="add-jwk-header" type="button" class="key-action-btn" title="Embed this public key as a jwk field in the JWT header">Add JWK Header</button>
+          </div>
+        </li>
+        <li class="key-item">
+          <span class="key-name">Private Key</span>
+          <div class="key-actions">
+            <button class="copy-key-btn" data-key="private" data-format="jwk" type="button">Copy as JWK</button>
+            <button class="copy-key-btn" data-key="private" data-format="pem" type="button">Copy as PEM</button>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="result-section header-tools" hidden>
+      <h2>Header Tools</h2>
+      <button id="add-jku-header" type="button" title="Add a jku (JWK Set URL) field in the JWT header">Add JKU Header</button>
+    </section>
+
     <section class="result-section">
       <h2>JWT</h2>
       <textarea id="jwt" disabled></textarea>
@@ -32,7 +78,12 @@
     <button id="save-jwt" type="button">Save to cookie</button>
     <p id="error" role="status"></p>
   </div>
-</body>
-<script src="./content.js"></script>
+  <footer class="credit">
+    Made by Amin with <span class="broken-heart" tabindex="0" aria-label="broken heart">💔
+      <span class="broken-heart-tooltip" role="tooltip">Maybe in another universe...</span>
+    </span>
+  </footer>
+  <script src="./content.js"></script>
 
+</body>
 </html>
