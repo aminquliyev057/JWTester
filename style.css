@@ -101,7 +101,7 @@ pre {
 
 #secret{
       box-sizing: border-box;
-      width: 180px;
+      width: 100%;
       overflow: auto;
       background-color: #1c1b1b;
       color: #fff;

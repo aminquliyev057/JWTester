@@ -320,10 +320,14 @@ function initializeEncoder() {
     const rs256Section = document.querySelector('#rs256-section');
     const privateKeyPem = document.querySelector('#private-key-pem');
     const privateKeyFile = document.querySelector('#private-key-file');
+    const generateHs256KeyButton = document.querySelector('#generate-hs256-key');
+    const copyHs256JwkButton = document.querySelector('#copy-hs256-jwk');
+    const addHs256JwkHeaderButton = document.querySelector('#add-hs256-jwk-header');
+    const hs256KeyList = document.querySelector('#hs256-key-list');
 
     const generateKeypairButton = document.querySelector('#generate-keypair');
     const keyList = document.querySelector('#key-list');
-    const copyButtons = document.querySelectorAll('.copy-key-btn');
+    const copyButtons = document.querySelectorAll('.copy-key-btn[data-key]');
 
     const addJwkHeaderButton = document.querySelector('#add-jwk-header');
     const addJkuHeaderButton = document.querySelector('#add-jku-header');
@@ -355,18 +359,20 @@ function initializeEncoder() {
     }
 
     // ----- Algorithm switching -----
-    // When HS256 (or none) is selected, hide the RS256-only sections:
-    // the Key Pair Generator (and the key list inside it) plus Header Tools.
-    // Only RS256 needs the JWK/JKU header-injection workflow.
+    // Keep RSA key generation and JKU tools limited to RS256. HS256 key tools
+    // are part of the HS256 secret section.
     function updateAlgorithmSections(alg) {
         const a = (alg || 'HS256').toUpperCase();
+        const isHs256 = (a === 'HS256');
         const isRs256 = (a === 'RS256');
-        if (hs256Section) hs256Section.hidden = (a !== 'HS256');
+        if (hs256Section) hs256Section.hidden = !isHs256;
         if (rs256Section) rs256Section.hidden = !isRs256;
-        if (secretInput) secretInput.disabled = (a !== 'HS256');
+        if (secretInput) secretInput.disabled = !isHs256;
         const keyGen = document.querySelector('.key-pair-generator');
+        const hs256KeyGen = document.querySelector('.hs256-key-generator');
         const headerTools = document.querySelector('.header-tools');
         if (keyGen) keyGen.hidden = !isRs256;
+        if (hs256KeyGen) hs256KeyGen.hidden = !isHs256;
         if (headerTools) headerTools.hidden = !isRs256;
     }
 
@@ -384,6 +390,22 @@ function initializeEncoder() {
         }
     }
 
+    function updateHs256KeyList() {
+        if (hs256KeyList) hs256KeyList.hidden = !secretInput || !secretInput.value;
+    }
+
+    async function createHs256Jwk(secret, kid) {
+        const key = base64UrlEncodeBytes(getHs256KeyBytes(secret));
+        const thumbprint = await computeJwkThumbprint({ kty: 'oct', k: key });
+        return {
+            kty: 'oct',
+            k: key,
+            kid: kid || thumbprint,
+            alg: 'HS256',
+            use: 'sig'
+        };
+    }
+
     // ----- Main encoder routine -----
     async function updateJWT() {
         const currentUpdateId = ++updateId;
@@ -399,7 +421,7 @@ function initializeEncoder() {
                 error.textContent = 'Header/Body must be valid JSON: ' +
                     (parseError instanceof Error ? parseError.message : String(parseError));
             }
-            return;
+            return false;
         }
 
         const alg = (header.alg || 'HS256').toString().toUpperCase();
@@ -419,11 +441,14 @@ function initializeEncoder() {
             } else {
                 throw new Error(`Unsupported algorithm: ${header.alg}. Use HS256, RS256, or none.`);
             }
-            if (currentUpdateId === updateId && jwtInput) jwtInput.value = token;
+            if (currentUpdateId !== updateId) return false;
+            if (jwtInput) jwtInput.value = token;
+            return true;
         } catch (encodeError) {
             if (currentUpdateId === updateId) {
                 error.textContent = encodeError instanceof Error ? encodeError.message : String(encodeError);
             }
+            return false;
         }
     }
 
@@ -438,8 +463,78 @@ function initializeEncoder() {
         secretInput.addEventListener('input', () => {
             userTouchedSecret = true;
             browser.storage.local.remove('crackedJwtSecret');
+            updateHs256KeyList();
             saveEncoderState();
             updateJWT();
+        });
+    }
+
+    if (generateHs256KeyButton) {
+        generateHs256KeyButton.addEventListener('click', async () => {
+            error.style.color = '';
+            error.textContent = '';
+            if (!secretInput) return;
+            try {
+                const randomKey = crypto.getRandomValues(new Uint8Array(32));
+                secretInput.value = base64UrlEncodeBytes(randomKey);
+                userTouchedSecret = true;
+                await browser.storage.local.remove('crackedJwtSecret');
+                updateHs256KeyList();
+                saveEncoderState();
+                if (!await updateJWT()) return;
+                error.style.color = '#66bb6a';
+                error.textContent = 'A 256-bit HS256 secret was generated.';
+            } catch (generationError) {
+                error.textContent = 'Key generation failed: ' +
+                    (generationError instanceof Error ? generationError.message : String(generationError));
+            }
+        });
+    }
+
+    if (copyHs256JwkButton) {
+        copyHs256JwkButton.addEventListener('click', async () => {
+            const secret = secretInput ? secretInput.value : '';
+            try {
+                const jwk = await createHs256Jwk(secret);
+                await navigator.clipboard.writeText(JSON.stringify(jwk, null, 2));
+                copyHs256JwkButton.classList.add('copied');
+                setTimeout(() => copyHs256JwkButton.classList.remove('copied'), 1400);
+                error.style.color = '#66bb6a';
+                error.textContent = 'Copied the HS256 octet JWK.';
+            } catch (copyError) {
+                error.textContent = 'Copy failed: ' +
+                    (copyError instanceof Error ? copyError.message : String(copyError));
+            }
+        });
+    }
+
+    if (addHs256JwkHeaderButton) {
+        addHs256JwkHeaderButton.addEventListener('click', async () => {
+            error.style.color = '';
+            error.textContent = '';
+            const secret = secretInput ? secretInput.value : '';
+            if (!window.confirm('This embeds the HS256 signing secret in the JWT header. Anyone who can read the token can recover it and forge signatures. This is for testing only. Continue?')) {
+                return;
+            }
+            try {
+                const header = JSON.parse(jwtParts[0].value || '{}');
+                const kid = typeof header.kid === 'string' && header.kid.length > 0
+                    ? header.kid
+                    : undefined;
+                const jwk = await createHs256Jwk(secret, kid);
+                header.alg = 'HS256';
+                header.kid = jwk.kid;
+                header.jwk = jwk;
+                jwtParts[0].value = JSON.stringify(header, null, 2);
+                if (algorithmSelect) algorithmSelect.value = 'HS256';
+                updateAlgorithmSections('HS256');
+                saveEncoderState();
+                if (!await updateJWT()) return;
+                error.style.color = '#66bb6a';
+                error.textContent = 'Embedded the HS256 octet JWK in the JWT header. The secret is visible in the token.';
+            } catch (headerError) {
+                error.textContent = headerError instanceof Error ? headerError.message : String(headerError);
+            }
         });
     }
 
@@ -751,6 +846,7 @@ function initializeEncoder() {
                 secretInput.value = cracked;
             }
         }
+        updateHs256KeyList();
         syncAlgorithmFromHeader();
         // 4. Restore any persisted RSA key pair so copy buttons keep working.
         return loadPersistedKeyPair();
@@ -897,6 +993,10 @@ function bytesToAscii(bytes) {
 // ============================================================
 // JWT signers
 // ============================================================
+function getHs256KeyBytes(secret) {
+    return secret ? new TextEncoder().encode(secret) : new Uint8Array([0]);
+}
+
 async function createJWTNone(header, payload) {
     const encodedHeader = base64UrlEncode(JSON.stringify(header));
     const encodedPayload = base64UrlEncode(JSON.stringify(payload));
@@ -910,7 +1010,7 @@ async function createJWTHS256(header, payload, secret) {
 
     const key = await crypto.subtle.importKey(
         'raw',
-        new TextEncoder().encode(secret || ''),
+        getHs256KeyBytes(secret),
         { name: 'HMAC', hash: 'SHA-256' },
         false,
         ['sign']
@@ -966,15 +1066,12 @@ function bytesToPem(bytes, label) {
     return `-----BEGIN ${label}-----\n${lines.join('\n')}\n-----END ${label}-----`;
 }
 
-// RFC 7638 §3: JWK thumbprint = base64url(SHA-256(canonical JSON of {e, kty, n})).
-// The keys in the canonical JSON MUST be in lexicographic order with no
-// whitespace. Used as a stable kid derived from the public key itself.
+// RFC 7638 §3: JWK thumbprint uses the lexicographically ordered required
+// members for RSA ({e, kty, n}) or octet-sequence ({k, kty}) keys.
 async function computeJwkThumbprint(jwk) {
-    const canonical = JSON.stringify({
-        e: jwk.e,
-        kty: jwk.kty,
-        n: jwk.n
-    });
+    const canonical = jwk.kty === 'oct'
+        ? JSON.stringify({ k: jwk.k, kty: jwk.kty })
+        : JSON.stringify({ e: jwk.e, kty: jwk.kty, n: jwk.n });
     const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(canonical));
     return base64UrlEncodeBytes(new Uint8Array(hash));
 }

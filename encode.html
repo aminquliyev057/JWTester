@@ -33,7 +33,21 @@
 
     <section class="result-section" id="hs256-section">
       <h2>HS256 Secret</h2>
-      <input id="secret" type="text" placeholder="shared secret">
+      <input id="secret" type="text" placeholder="shared secret (empty uses a null byte)">
+    </section>
+
+    <section class="result-section hs256-key-generator" hidden>
+      <h2>Symmetric Key Generator (HS256)</h2>
+      <button id="generate-hs256-key" type="button">Generate Symmetric Key</button>
+      <ul id="hs256-key-list" class="key-list" hidden>
+        <li class="key-item">
+          <span class="key-name">Symmetric Key</span>
+          <div class="key-actions">
+            <button id="copy-hs256-jwk" class="copy-key-btn" type="button">Copy as JWK</button>
+            <button id="add-hs256-jwk-header" class="key-action-btn" type="button" title="Embedding an octet JWK exposes the HS256 secret in the JWT header">Add JWK Header</button>
+          </div>
+        </li>
+      </ul>
     </section>
 
     <section class="result-section" id="rs256-section" hidden>

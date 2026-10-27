@@ -3,13 +3,20 @@ const jwtRegex = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*$/;
 async function checkJWT(tabId, url) {
     const cookies = await browser.cookies.getAll({ url });
     const jwtCookie = cookies.find(c => jwtRegex.test(c.value));
+    const key = `jwt:${tabId}`;
 
     if (jwtCookie) {
-        await browser.storage.local.set({ [`jwt:${tabId}`]: jwtCookie.value });
+        await browser.storage.local.set({ [key]: jwtCookie.value });
         browser.browserAction.setBadgeText({ tabId, text: 'JWT' });
+        browser.browserAction.setBadgeBackgroundColor({ tabId, color: '#c62828' });
+        browser.browserAction.setTitle({
+            tabId,
+            title: `JWT found in cookie: ${jwtCookie.name}`
+        });
     } else {
-        await browser.storage.local.remove(`jwt:${tabId}`);
+        await browser.storage.local.remove(key);
         browser.browserAction.setBadgeText({ tabId, text: '' });
+        browser.browserAction.setTitle({ tabId, title: 'JWT Decoder' });
     }
 }
 
